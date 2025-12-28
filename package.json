@@ -1,0 +1,35 @@
+{
+  "name": "react-solitaire",
+  "version": "0.0.1",
+  "private": true,
+  "description": "A Windows 3.1-style Klondike Solitaire game built with React",
+  "author": "Steve Arnott",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rymix/react-solitaire.git"
+  },
+  "scripts": {
+    "dev": "pnpm --filter demo dev",
+    "build": "pnpm --filter @react-solitaire/core build && pnpm --filter @react-solitaire/react build",
+    "build:all": "pnpm build && pnpm --filter demo build",
+    "build:core": "pnpm --filter @react-solitaire/core build",
+    "build:react": "pnpm --filter @react-solitaire/react build",
+    "test": "pnpm --filter @react-solitaire/core test",
+    "test:core": "pnpm --filter @react-solitaire/core test",
+    "lint": "pnpm -r lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "clean": "pnpm -r clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "prettier": "^3.3.0",
+    "typescript": "^5.5.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@9.1.0"
+}

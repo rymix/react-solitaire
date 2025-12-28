@@ -1,0 +1,77 @@
+{
+  "name": "@react-solitaire/react",
+  "version": "0.0.1",
+  "description": "React components for Klondike Solitaire with Windows 3.1 styling",
+  "author": "Steve Arnott",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./themes/*": {
+      "types": "./dist/themes/*.d.ts",
+      "import": "./dist/themes/*.js",
+      "require": "./dist/themes/*.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src --ext .ts,.tsx",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@react-solitaire/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "styled-components": "^6.0.0",
+    "use-sound": "^4.0.0 || ^5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "use-sound": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/react": "^14.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^9.0.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "jsdom": "^24.0.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "styled-components": "^6.1.0",
+    "tsup": "^8.1.0",
+    "typescript": "^5.5.0",
+    "use-sound": "^5.0.0",
+    "vitest": "^2.0.0"
+  },
+  "keywords": [
+    "react",
+    "solitaire",
+    "klondike",
+    "card-game",
+    "windows-31",
+    "retro",
+    "styled-components"
+  ]
+}
