@@ -2188,9 +2188,6 @@ var CARD_BACKS = [
   { id: "Back-Pattern1.gif", name: "Pattern 1" },
   { id: "Back-Pattern2.gif", name: "Pattern 2" },
   { id: "Back-Robot.gif", name: "Robot" },
-  { id: "Back-Robot-1.gif", name: "Robot 1" },
-  { id: "Back-Robot-2.gif", name: "Robot 2" },
-  { id: "Back-Robot-3.gif", name: "Robot 3" },
   { id: "Back-Roses.gif", name: "Roses" },
   { id: "Back-Shell.gif", name: "Shell" }
 ];
@@ -2210,12 +2207,12 @@ var SelectorTitle = styled2__default.default.div`
 `;
 var CardBackGrid = styled2__default.default.div`
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 6px;
 `;
 var CardBackOption = styled2__default.default.button`
-  width: 50px;
-  height: 70px;
+  width: 59px;
+  height: 80px;
   padding: 2px;
   border: ${(p) => p.$isSelected ? "2px solid #000080" : "2px outset #ffffff"};
   background: ${(p) => p.$isSelected ? "#000080" : "#c0c0c0"};

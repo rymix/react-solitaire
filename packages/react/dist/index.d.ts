@@ -415,15 +415,6 @@ declare const CARD_BACKS: readonly [{
     readonly id: "Back-Robot.gif";
     readonly name: "Robot";
 }, {
-    readonly id: "Back-Robot-1.gif";
-    readonly name: "Robot 1";
-}, {
-    readonly id: "Back-Robot-2.gif";
-    readonly name: "Robot 2";
-}, {
-    readonly id: "Back-Robot-3.gif";
-    readonly name: "Robot 3";
-}, {
     readonly id: "Back-Roses.gif";
     readonly name: "Roses";
 }, {

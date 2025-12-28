@@ -18,6 +18,7 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
     height: 100%;
     overflow: hidden;
+    user-select: none;
   }
 `;
 
@@ -123,8 +124,8 @@ const WinStats = styled.div`
 const SettingsPanel = styled.div<{ $isOpen: boolean }>`
   position: fixed;
   top: 50px;
-  right: ${p => p.$isOpen ? '0' : '-320px'};
-  width: 300px;
+  right: ${p => p.$isOpen ? '0' : '-500px'};
+  width: 500px;
   background: #c0c0c0;
   border: 2px outset #ffffff;
   box-shadow: -2px 2px 8px rgba(0, 0, 0, 0.3);
@@ -231,8 +232,7 @@ function App() {
       <AppContainer>
         <Header>
           <Title>
-            <CardIcon>🂡</CardIcon>
-            Solitaire
+            Klondike Solitaire
           </Title>
           
           <Controls>
@@ -286,8 +286,8 @@ function App() {
         {/* Settings Panel */}
         <SettingsPanel $isOpen={settingsOpen}>
           <SettingsHeader>
-            <span>Card Back Selection</span>
-            <CloseButton onClick={() => setSettingsOpen(false)}>×</CloseButton>
+            <span>Select Card Back</span>
+            <CloseButton onClick={() => setSettingsOpen(false)}>X</CloseButton>
           </SettingsHeader>
           <CardBackSelector
             selected={cardBack}

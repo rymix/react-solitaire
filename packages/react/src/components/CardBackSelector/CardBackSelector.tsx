@@ -4,18 +4,18 @@ import styled from 'styled-components';
  * Available card back designs
  */
 export const CARD_BACKS = [
-  { id: 'Back-Aquarium.gif', name: 'Aquarium' },
-  { id: 'Back-CardHand.gif', name: 'Card Hand' },
-  { id: 'Back-Castle.gif', name: 'Castle' },
-  { id: 'Back-Fishes.gif', name: 'Fishes' },
-  { id: 'Back-FlowerBlack.gif', name: 'Flower (Black)' },
-  { id: 'Back-FlowerBlue.gif', name: 'Flower (Blue)' },
-  { id: 'Back-PalmBeach.gif', name: 'Palm Beach' },
   { id: 'Back-Pattern1.gif', name: 'Pattern 1' },
   { id: 'Back-Pattern2.gif', name: 'Pattern 2' },
+  { id: 'Back-Fishes.gif', name: 'Fishes' },
+  { id: 'Back-Aquarium.gif', name: 'Aquarium' },
+  { id: 'Back-FlowerBlack.gif', name: 'Flower (Black)' },
+  { id: 'Back-FlowerBlue.gif', name: 'Flower (Blue)' },
   { id: 'Back-Robot.gif', name: 'Robot' },
   { id: 'Back-Roses.gif', name: 'Roses' },
   { id: 'Back-Shell.gif', name: 'Shell' },
+  { id: 'Back-Castle.gif', name: 'Castle' },
+  { id: 'Back-PalmBeach.gif', name: 'Palm Beach' },
+  { id: 'Back-CardHand.gif', name: 'Card Hand' },
 ] as const;
 
 export type CardBackId = typeof CARD_BACKS[number]['id'];
@@ -56,9 +56,17 @@ const CardBackGrid = styled.div`
   gap: 6px;
 `;
 
+const CardBackGridItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+`;
+
 const CardBackOption = styled.button<{ $isSelected: boolean }>`
-  width: 59px;
-  height: 80px;
+  display: block;
+  width: 91px;
+  height: 120px;
   padding: 2px;
   border: ${p => p.$isSelected ? '2px solid #000080' : '2px outset #ffffff'};
   background: ${p => p.$isSelected ? '#000080' : '#c0c0c0'};
@@ -84,6 +92,11 @@ const CardBackImage = styled.img`
   image-rendering: crisp-edges;
 `;
 
+const CardBackName = styled.div`
+  font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;
+  font-size: 13px;
+`;
+
 /**
  * CardBackSelector component
  * Allows users to select from available card back designs
@@ -96,21 +109,23 @@ export function CardBackSelector({
 }: CardBackSelectorProps) {
   return (
     <SelectorContainer className={className}>
-      <SelectorTitle>Select Card Back</SelectorTitle>
       <CardBackGrid>
         {CARD_BACKS.map((cardBack) => (
-          <CardBackOption
-            key={cardBack.id}
-            $isSelected={selected === cardBack.id}
-            onClick={() => onSelect(cardBack.id)}
-            title={cardBack.name}
-          >
-            <CardBackImage
-              src={`${basePath}/${cardBack.id}`}
-              alt={cardBack.name}
-              draggable={false}
-            />
-          </CardBackOption>
+          <CardBackGridItem>
+            <CardBackOption
+              key={cardBack.id}
+              $isSelected={selected === cardBack.id}
+              onClick={() => onSelect(cardBack.id)}
+              title={cardBack.name}
+            >
+              <CardBackImage
+                src={`${basePath}/${cardBack.id}`}
+                alt={cardBack.name}
+                draggable={false}
+              />
+            </CardBackOption>
+            <CardBackName>{cardBack.name}</CardBackName>
+          </CardBackGridItem>
         ))}
       </CardBackGrid>
     </SelectorContainer>
