@@ -316,7 +316,7 @@ function App() {
               <p>Moves: {winStats.moves}</p>
               <p>Score: {winStats.score}</p>
             </WinStats>
-            <Button onClick={handleNewGame}>
+            <Button onClick={() => handleNewGame(false)}>
               Play Again
             </Button>
           </WinMessage>
