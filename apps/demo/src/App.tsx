@@ -201,19 +201,31 @@ function App() {
     };
   }, [cardBack]);
 
-  const handleNewGame = useCallback(() => {
-    setNewGameTrigger(prev => prev + 1);
-    setWinStats(null);
-  }, []);
+  const confirmNewGame = () => {
+    if (window.confirm('This will start a new game. Continue?')) {
+      return true;
+    }
 
-  const handleWin = useCallback((stats: { time: number; moves: number; score: number }) => {
-    setWinStats(stats);
+    return false;
+  }
+
+  const handleNewGame = useCallback((forceStart:boolean = false) => {
+    if (forceStart || confirmNewGame()) {
+      setNewGameTrigger(prev => prev + 1);
+      setWinStats(null);
+    }
   }, []);
 
   const handleDrawModeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setDrawMode(e.target.value as DrawModeOption);
-    handleNewGame();
+    if (confirmNewGame()) {
+      setDrawMode(e.target.value as DrawModeOption);
+      handleNewGame(true);
+    }
   };
+
+    const handleWin = useCallback((stats: { time: number; moves: number; score: number }) => {
+    setWinStats(stats);
+  }, []);
 
   const handleCardBackChange = (newCardBack: string) => {
     setCardBack(newCardBack);
@@ -236,14 +248,6 @@ function App() {
           </Title>
           
           <Controls>
-            <label style={{ color: 'white', fontSize: 12 }}>
-              Draw:
-              <Select value={drawMode} onChange={handleDrawModeChange} style={{ marginLeft: 4 }}>
-                <option value="draw-one">Draw 1</option>
-                <option value="draw-three">Draw 3</option>
-              </Select>
-            </label>
-            
             <CheckboxLabel>
               <input 
                 type="checkbox" 
@@ -252,13 +256,21 @@ function App() {
               />
               Sound
             </CheckboxLabel>
-            
-            <Button onClick={handleNewGame}>
-              New Game
-            </Button>
-            
+
             <Button onClick={() => setSettingsOpen(!settingsOpen)}>
               Card Backs
+            </Button>
+
+            <label style={{ color: 'white', fontSize: 12 }}>
+              Draw:
+              <Select value={drawMode} onChange={handleDrawModeChange} style={{ marginLeft: 4 }}>
+                <option value="draw-one">Draw 1</option>
+                <option value="draw-three">Draw 3</option>
+              </Select>
+            </label>
+                        
+            <Button onClick={() => handleNewGame(false)}>
+              New Game
             </Button>
           </Controls>
         </Header>
