@@ -111,9 +111,8 @@ export function CardBackSelector({
     <SelectorContainer className={className}>
       <CardBackGrid>
         {CARD_BACKS.map((cardBack) => (
-          <CardBackGridItem>
+          <CardBackGridItem key={cardBack.id}>
             <CardBackOption
-              key={cardBack.id}
               $isSelected={selected === cardBack.id}
               onClick={() => onSelect(cardBack.id)}
               title={cardBack.name}

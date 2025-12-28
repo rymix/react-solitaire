@@ -4,7 +4,8 @@ import {
   Solitaire, 
   win31Theme, 
   CardBackSelector,
-  type SolitaireTheme 
+  type SolitaireTheme, 
+  CARD_BACKS
 } from '@react-solitaire/react';
 
 const GlobalStyle = createGlobalStyle`
@@ -172,7 +173,9 @@ function App() {
   const [drawMode, setDrawMode] = useState<DrawModeOption>('draw-one');
   const [newGameTrigger, setNewGameTrigger] = useState(0);
   const [winStats, setWinStats] = useState<{ time: number; moves: number; score: number } | null>(null);
-  const [cardBack, setCardBack] = useState('Back-Robot.gif');
+  const [cardBack, setCardBack] = useState(
+    () => CARD_BACKS[Math.floor(Math.random() * CARD_BACKS.length)].id
+  );
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   
