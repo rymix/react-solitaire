@@ -288,7 +288,9 @@ function App() {
               sound: {
                 enabled: soundEnabled,
                 volume: 0.5,
-                sounds: {},
+                sounds: {
+                  victory: '/sounds/tada.mp3',
+                },
               },
             }}
             onWin={handleWin}
@@ -319,7 +321,7 @@ function App() {
               <p>Moves: {winStats.moves}</p>
               <p>Score: {winStats.score}</p>
             </WinStats>
-            <Button onClick={() => handleNewGame(false)}>
+            <Button onClick={() => handleNewGame(true)}>
               Play Again
             </Button>
           </WinMessage>

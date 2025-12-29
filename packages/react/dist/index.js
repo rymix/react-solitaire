@@ -1855,6 +1855,7 @@ function Solitaire({
   useEffect(() => {
     if (gameState.isWon && !prevIsWonRef.current) {
       setShowVictory(true);
+      soundsRef.current.play("victory");
       onWinRef.current?.({
         time: gameState.endTime && gameState.startTime ? Math.floor((gameState.endTime - gameState.startTime) / 1e3) : 0,
         moves: gameState.moves,
@@ -2171,18 +2172,18 @@ function Solitaire({
   );
 }
 var CARD_BACKS = [
-  { id: "Back-Aquarium.gif", name: "Aquarium" },
-  { id: "Back-CardHand.gif", name: "Card Hand" },
-  { id: "Back-Castle.gif", name: "Castle" },
-  { id: "Back-Fishes.gif", name: "Fishes" },
-  { id: "Back-FlowerBlack.gif", name: "Flower (Black)" },
-  { id: "Back-FlowerBlue.gif", name: "Flower (Blue)" },
-  { id: "Back-PalmBeach.gif", name: "Palm Beach" },
   { id: "Back-Pattern1.gif", name: "Pattern 1" },
   { id: "Back-Pattern2.gif", name: "Pattern 2" },
+  { id: "Back-Fishes.gif", name: "Fishes" },
+  { id: "Back-Aquarium.gif", name: "Aquarium" },
+  { id: "Back-FlowerBlack.gif", name: "Flower (Black)" },
+  { id: "Back-FlowerBlue.gif", name: "Flower (Blue)" },
   { id: "Back-Robot.gif", name: "Robot" },
   { id: "Back-Roses.gif", name: "Roses" },
-  { id: "Back-Shell.gif", name: "Shell" }
+  { id: "Back-Shell.gif", name: "Shell" },
+  { id: "Back-Castle.gif", name: "Castle" },
+  { id: "Back-PalmBeach.gif", name: "Palm Beach" },
+  { id: "Back-CardHand.gif", name: "Card Hand" }
 ];
 var SelectorContainer = styled2.div`
   display: flex;
@@ -2192,7 +2193,7 @@ var SelectorContainer = styled2.div`
   background: #c0c0c0;
   border: 2px inset #ffffff;
 `;
-var SelectorTitle = styled2.div`
+styled2.div`
   font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;
   font-size: 12px;
   font-weight: bold;
@@ -2203,9 +2204,16 @@ var CardBackGrid = styled2.div`
   grid-template-columns: repeat(4, 1fr);
   gap: 6px;
 `;
+var CardBackGridItem = styled2.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+`;
 var CardBackOption = styled2.button`
-  width: 59px;
-  height: 80px;
+  display: block;
+  width: 91px;
+  height: 120px;
   padding: 2px;
   border: ${(p) => p.$isSelected ? "2px solid #000080" : "2px outset #ffffff"};
   background: ${(p) => p.$isSelected ? "#000080" : "#c0c0c0"};
@@ -2229,15 +2237,18 @@ var CardBackImage = styled2.img`
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
 `;
+var CardBackName = styled2.div`
+  font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;
+  font-size: 13px;
+`;
 function CardBackSelector({
   selected,
   onSelect,
   basePath = "/cards",
   className
 }) {
-  return /* @__PURE__ */ jsxs(SelectorContainer, { className, children: [
-    /* @__PURE__ */ jsx(SelectorTitle, { children: "Select Card Back" }),
-    /* @__PURE__ */ jsx(CardBackGrid, { children: CARD_BACKS.map((cardBack) => /* @__PURE__ */ jsx(
+  return /* @__PURE__ */ jsx(SelectorContainer, { className, children: /* @__PURE__ */ jsx(CardBackGrid, { children: CARD_BACKS.map((cardBack) => /* @__PURE__ */ jsxs(CardBackGridItem, { children: [
+    /* @__PURE__ */ jsx(
       CardBackOption,
       {
         $isSelected: selected === cardBack.id,
@@ -2251,10 +2262,10 @@ function CardBackSelector({
             draggable: false
           }
         )
-      },
-      cardBack.id
-    )) })
-  ] });
+      }
+    ),
+    /* @__PURE__ */ jsx(CardBackName, { children: cardBack.name })
+  ] }, cardBack.id)) }) });
 }
 
 export { CARD_BACKS, Card, CardBackSelector, Controls, Pile, Solitaire, Table, Timer, VictoryAnimation, defaultSoundConfig, win31Theme as defaultTheme, useDrag, useGame, useSounds, useStopwatch, useTimer, win31Theme };

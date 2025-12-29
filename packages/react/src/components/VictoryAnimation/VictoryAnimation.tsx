@@ -19,8 +19,10 @@ export interface VictoryAnimationProps {
   onComplete?: () => void;
   /** Scale factor */
   scale?: number;
-  /** Play bounce sound (throttled internally) */
-  onBounce?: () => void;
+  /** Play bounce sound with randomized pitch/volume */
+  onBounce?: (options?: { playbackRate?: number; volume?: number }) => void;
+  /** Play flip sound when card launches */
+  onFlip?: () => void;
   /** Callback with IDs of cards that have been launched (to hide from foundations) */
   onCardsLaunched?: (cardIds: Set<string>) => void;
 }
@@ -94,6 +96,7 @@ export const VictoryAnimation = React.memo(function VictoryAnimation({
   onComplete,
   scale = 1,
   onBounce,
+  onFlip,
   onCardsLaunched,
 }: VictoryAnimationProps) {
   // State to track if animation is active (for cleanup)
@@ -117,9 +120,11 @@ export const VictoryAnimation = React.memo(function VictoryAnimation({
   const onCompleteRef = useRef(onComplete);
   const onCardsLaunchedRef = useRef(onCardsLaunched);
   const onBounceRef = useRef(onBounce);
+  const onFlipRef = useRef(onFlip);
   onCompleteRef.current = onComplete;
   onCardsLaunchedRef.current = onCardsLaunched;
   onBounceRef.current = onBounce;
+  onFlipRef.current = onFlip;
 
   const cardWidth = theme.card.width * scale;
   const cardHeight = theme.card.height * scale;
@@ -227,6 +232,9 @@ export const VictoryAnimation = React.memo(function VictoryAnimation({
           launchedIdsRef.current.add(card.id);
           onCardsLaunchedRef.current?.(new Set(launchedIdsRef.current));
 
+          // Play flip sound on launch
+          onFlipRef.current?.();
+
           launchIndexRef.current++;
           lastLaunchTimeRef.current = currentTime;
         }
@@ -280,11 +288,13 @@ export const VictoryAnimation = React.memo(function VictoryAnimation({
         if (physics.y + cardHeight > containerHeight) {
           physics.y = containerHeight - cardHeight;
           physics.vy = -physics.vy * BOUNCE_DAMPING;
-          
-          // Play bounce sound (throttled)
+
+          // Play bounce sound with randomized pitch/volume (throttled)
           if (currentTime - lastBounceTimeRef.current > BOUNCE_SOUND_THROTTLE) {
             lastBounceTimeRef.current = currentTime;
-            onBounceRef.current?.();
+            const pitchVariation = 0.9 + Math.random() * 0.2; // ±10%
+            const volumeVariation = 0.9 + Math.random() * 0.2; // ±10%
+            onBounceRef.current?.({ playbackRate: pitchVariation, volume: volumeVariation });
           }
         }
 
@@ -292,9 +302,25 @@ export const VictoryAnimation = React.memo(function VictoryAnimation({
         if (physics.x < 0) {
           physics.x = 0;
           physics.vx = -physics.vx * BOUNCE_DAMPING;
+
+          // Play bounce sound with randomized pitch/volume (throttled)
+          if (currentTime - lastBounceTimeRef.current > BOUNCE_SOUND_THROTTLE) {
+            lastBounceTimeRef.current = currentTime;
+            const pitchVariation = 0.9 + Math.random() * 0.2; // ±10%
+            const volumeVariation = 0.9 + Math.random() * 0.2; // ±10%
+            onBounceRef.current?.({ playbackRate: pitchVariation, volume: volumeVariation });
+          }
         } else if (physics.x + cardWidth > containerWidth) {
           physics.x = containerWidth - cardWidth;
           physics.vx = -physics.vx * BOUNCE_DAMPING;
+
+          // Play bounce sound with randomized pitch/volume (throttled)
+          if (currentTime - lastBounceTimeRef.current > BOUNCE_SOUND_THROTTLE) {
+            lastBounceTimeRef.current = currentTime;
+            const pitchVariation = 0.9 + Math.random() * 0.2; // ±10%
+            const volumeVariation = 0.9 + Math.random() * 0.2; // ±10%
+            onBounceRef.current?.({ playbackRate: pitchVariation, volume: volumeVariation });
+          }
         }
 
         // Update DOM directly

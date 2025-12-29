@@ -18,7 +18,7 @@ export type SoundEffect =
  */
 export interface UseSoundsReturn {
   /** Play a sound effect */
-  play: (effect: SoundEffect, options?: { playbackRate?: number }) => void;
+  play: (effect: SoundEffect, options?: { playbackRate?: number; volume?: number }) => void;
   /** Stop a sound effect */
   stop: (effect: SoundEffect) => void;
   /** Whether sounds are enabled */
@@ -63,18 +63,20 @@ export function useSounds(config: Partial<SoundConfig> = {}): UseSoundsReturn {
     return null;
   }, []);
 
-  const play = useCallback((effect: SoundEffect, options: { playbackRate?: number } = {}) => {
+  const play = useCallback((effect: SoundEffect, options: { playbackRate?: number; volume?: number } = {}) => {
     if (!mergedConfig.enabled || !audioContext) return;
 
     const soundUrl = mergedConfig.sounds[effect];
+    const effectiveVolume = (options.volume ?? 1) * mergedConfig.volume;
+
     if (!soundUrl) {
       // Generate a simple beep for missing sounds (development)
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
-      
+
       oscillator.connect(gainNode);
       gainNode.connect(audioContext.destination);
-      
+
       // Different frequencies for different effects
       const frequencies: Record<SoundEffect, number> = {
         flip: 800,
@@ -85,16 +87,16 @@ export function useSounds(config: Partial<SoundConfig> = {}): UseSoundsReturn {
         victory: 1000,
         bounce: 400,
       };
-      
-      oscillator.frequency.value = frequencies[effect];
+
+      oscillator.frequency.value = frequencies[effect] * (options.playbackRate ?? 1);
       oscillator.type = 'sine';
-      
-      gainNode.gain.value = mergedConfig.volume * 0.3;
+
+      gainNode.gain.value = effectiveVolume * 0.3;
       gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-      
+
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + 0.1);
-      
+
       return;
     }
 
@@ -105,14 +107,14 @@ export function useSounds(config: Partial<SoundConfig> = {}): UseSoundsReturn {
       .then(audioBuffer => {
         const source = audioContext.createBufferSource();
         const gainNode = audioContext.createGain();
-        
+
         source.buffer = audioBuffer;
         source.playbackRate.value = options.playbackRate ?? 1;
-        
+
         source.connect(gainNode);
         gainNode.connect(audioContext.destination);
-        gainNode.gain.value = mergedConfig.volume;
-        
+        gainNode.gain.value = effectiveVolume;
+
         source.start(0);
       })
       .catch(err => {

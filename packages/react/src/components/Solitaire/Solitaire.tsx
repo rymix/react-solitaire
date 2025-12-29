@@ -228,9 +228,10 @@ export function Solitaire({
   useEffect(() => {
     if (gameState.isWon && !prevIsWonRef.current) {
       setShowVictory(true);
+      soundsRef.current.play('victory');
       onWinRef.current?.({
-        time: gameState.endTime && gameState.startTime 
-          ? Math.floor((gameState.endTime - gameState.startTime) / 1000) 
+        time: gameState.endTime && gameState.startTime
+          ? Math.floor((gameState.endTime - gameState.startTime) / 1000)
           : 0,
         moves: gameState.moves,
         score: gameState.score,
@@ -463,9 +464,14 @@ export function Solitaire({
     // Could show a "play again" dialog here
   }, []);
 
-  // Handle victory bounce sound
-  const handleVictoryBounce = useCallback(() => {
-    soundsRef.current.play('bounce');
+  // Handle victory bounce sound with randomized pitch/volume
+  const handleVictoryBounce = useCallback((options?: { playbackRate?: number; volume?: number }) => {
+    soundsRef.current.play('bounce', options);
+  }, []);
+
+  // Handle victory flip sound
+  const handleVictoryFlip = useCallback(() => {
+    soundsRef.current.play('flip');
   }, []);
 
   // Calculate minimum dimensions
@@ -610,6 +616,7 @@ export function Solitaire({
           containerHeight={containerSize.height}
           scale={scale}
           onBounce={handleVictoryBounce}
+          onFlip={handleVictoryFlip}
           onComplete={handleVictoryComplete}
           onCardsLaunched={setLaunchedCardIds}
         />
